@@ -69,7 +69,7 @@ module.exports = class metalx extends Exchange {
                         'address/deposit', // fetchDepositAddress
                     ],
                     'post': [
-                        'orders/create', // createOrder
+                        'orders', // createOrder
                         'withdraw', // withdraw
                     ],
                     'put': [
@@ -439,7 +439,7 @@ module.exports = class metalx extends Exchange {
         if (type === 'limit') {
             request['limitPrice'] = this.priceToPrecision (symbol, price);
         }
-        const response = await this.privatePostOrder (this.extend (request, params));
+        const response = await this.privatePostOrders (this.extend (request, params));
         return {
             'info': response,
             'id': this.parseString (response, 'orderId'),
@@ -553,7 +553,7 @@ module.exports = class metalx extends Exchange {
         const request = {
             'orderId': id,
         };
-        const response = await this.privateGetOrder (this.extend (request, params));
+        const response = await this.privateGetOrdersOrderId (this.extend (request, params));
         //   {
         //       "id": 1495144,
         //       "datetime": "2020-04-21T16:11:29.504Z",
