@@ -42,7 +42,7 @@ module.exports = class metalx extends Exchange {
                 '1d': '1d',
             },
             'urls': {
-                'logo': 'metalx.com',
+                'logo': 'https://user-images.githubusercontent.com/11918446/82477414-5162a000-9a84-11ea-8107-a4070b1c2e81.png',
                 'api': 'https://api-staging.metalx.com',
                 'www': 'https://www.metalx.com',
                 'doc': 'https://developers.metalx.com/api',
