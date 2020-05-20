@@ -42,7 +42,7 @@ module.exports = class metalx extends Exchange {
                 '1d': '1d',
             },
             'urls': {
-                'logo': 'https://user-images.githubusercontent.com/11918446/82477414-5162a000-9a84-11ea-8107-a4070b1c2e81.png',
+                'logo': 'https://user-images.githubusercontent.com/11918446/82482799-3b58dd80-9a8c-11ea-95e6-18b4fb02202a.png',
                 'api': 'https://api-staging.metalx.com',
                 'www': 'https://www.metalx.com',
                 'doc': 'https://developers.metalx.com/api',
@@ -521,8 +521,6 @@ module.exports = class metalx extends Exchange {
         }
         const side = this.safeStringLower (order, 'side');
         const clientOrderId = id;
-        // TODO: Need to get average price
-        const average = this.safeFloat (order, 'avgPrice');
         return {
             'info': order,
             'id': id,
@@ -536,7 +534,7 @@ module.exports = class metalx extends Exchange {
             'price': price,
             'amount': amount,
             'cost': cost,
-            'average': average,
+            'average': undefined,
             'filled': filled,
             'remaining': remaining,
             'status': status,
