@@ -50,12 +50,12 @@ module.exports = class metalx extends Exchange {
             'api': {
                 'public': {
                     'get': [
-                        'exchange-info', // fetchMarkets
-                        'tickers', // fetchTicker
-                        'assets', // fetchCurrencies
-                        'depth', // fetchOrderBook
-                        'trades', // fetchTrades
-                        'ohlcv', // fetchOHLCV
+                        'market/exchange-info', // fetchMarkets
+                        'market/tickers', // fetchTicker
+                        'market/assets', // fetchCurrencies
+                        'market/depth', // fetchOrderBook
+                        'market/trades', // fetchTrades
+                        'market/ohlcv', // fetchOHLCV
                     ],
                 },
                 'private': {
@@ -63,17 +63,17 @@ module.exports = class metalx extends Exchange {
                         'account', // fetchBalance
                         'deposits', // fetchDeposits
                         'withdrawals', // fetchWithdrawals
-                        'orders', // fetchOpenOrders, fetchAllOrders
-                        'orders/{orderId}', // getOrder,
-                        'trades/me', // fetchMyTrades
-                        'address/deposit', // fetchDepositAddress
+                        'addresses/deposit', // fetchDepositAddress
+                        'market/orders', // fetchOpenOrders, fetchAllOrders
+                        'market/orders/{orderId}', // getOrder,
+                        'market/trades/me', // fetchMyTrades
                     ],
                     'post': [
-                        'orders', // createOrder
-                        'withdraw', // withdraw
+                        'market/orders', // createOrder
+                        'withdrawals', // withdraw
                     ],
                     'put': [
-                        'orders/cancel', // cancelOrder
+                        'market/orders/cancel', // cancelOrder
                     ],
                 },
             },
@@ -324,7 +324,6 @@ module.exports = class metalx extends Exchange {
         if (market !== undefined) {
             symbol = market['symbol'];
         }
-        // Revisit later when doing personal trades
         const id = this.safeString (trade, 'id');
         const order = this.safeString (trade, 'order');
         const type = this.safeString (trade, 'type');
