@@ -7,6 +7,7 @@ from ccxt.base.exchange import Exchange
 import hashlib
 from ccxt.base.errors import ExchangeError
 from ccxt.base.errors import AuthenticationError
+from ccxt.base.errors import ArgumentsRequired
 
 
 class itbit(Exchange):
@@ -19,9 +20,20 @@ class itbit(Exchange):
             'rateLimit': 2000,
             'version': 'v1',
             'has': {
+                'cancelOrder': True,
                 'CORS': True,
                 'createMarketOrder': False,
+                'createOrder': True,
+                'fetchBalance': True,
+                'fetchClosedOrders': True,
                 'fetchMyTrades': True,
+                'fetchOpenOrders': True,
+                'fetchOrder': True,
+                'fetchOrderBook': True,
+                'fetchOrders': True,
+                'fetchTicker': True,
+                'fetchTrades': True,
+                'fetchTransactions': True,
             },
             'urls': {
                 'logo': 'https://user-images.githubusercontent.com/1294454/27822159-66153620-60ad-11e7-89e7-005f6d7f3de0.jpg',
@@ -239,7 +251,7 @@ class itbit(Exchange):
         self.load_markets()
         walletId = self.safe_string(params, 'walletId')
         if walletId is None:
-            raise ExchangeError(self.id + ' fetchMyTrades requires a walletId parameter')
+            raise ArgumentsRequired(self.id + ' fetchMyTrades requires a walletId parameter')
         request = {
             'walletId': walletId,
         }

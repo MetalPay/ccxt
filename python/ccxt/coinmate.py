@@ -21,18 +21,22 @@ class coinmate(Exchange):
             'countries': ['GB', 'CZ', 'EU'],  # UK, Czech Republic
             'rateLimit': 1000,
             'has': {
-                'CORS': True,
-                'fetchBalance': True,
-                'fetchOrders': True,
-                'fetchOrder': True,
-                'fetchMyTrades': True,
-                'fetchTransactions': True,
-                'fetchOpenOrders': True,
-                'createOrder': True,
                 'cancelOrder': True,
+                'CORS': True,
+                'createOrder': True,
+                'fetchBalance': True,
+                'fetchMarkets': True,
+                'fetchMyTrades': True,
+                'fetchOpenOrders': True,
+                'fetchOrder': True,
+                'fetchOrderBook': True,
+                'fetchOrders': True,
+                'fetchTicker': True,
+                'fetchTrades': True,
+                'fetchTransactions': True,
             },
             'urls': {
-                'logo': 'https://user-images.githubusercontent.com/1294454/27811229-c1efb510-606c-11e7-9a36-84ba2ce412d8.jpg',
+                'logo': 'https://user-images.githubusercontent.com/51840849/87460806-1c9f3f00-c616-11ea-8c46-a77018a8f3f4.jpg',
                 'api': 'https://coinmate.io/api',
                 'www': 'https://coinmate.io',
                 'fees': 'https://coinmate.io/fees',
@@ -536,6 +540,7 @@ class coinmate(Exchange):
         statuses = {
             'FILLED': 'closed',
             'CANCELLED': 'canceled',
+            'PARTIALLY_FILLED': 'open',
             'OPEN': 'open',
         }
         return self.safe_string(statuses, status, status)
@@ -601,7 +606,9 @@ class coinmate(Exchange):
         filled = None
         cost = None
         if (amount is not None) and (remaining is not None):
-            filled = amount - remaining
+            filled = max(amount - remaining, 0)
+            if remaining == 0:
+                status = 'closed'
             if price is not None:
                 cost = filled * price
         average = self.safe_float(order, 'avgPrice')

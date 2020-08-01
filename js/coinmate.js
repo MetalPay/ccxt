@@ -15,18 +15,22 @@ module.exports = class coinmate extends Exchange {
             'countries': [ 'GB', 'CZ', 'EU' ], // UK, Czech Republic
             'rateLimit': 1000,
             'has': {
-                'CORS': true,
-                'fetchBalance': true,
-                'fetchOrders': true,
-                'fetchOrder': true,
-                'fetchMyTrades': true,
-                'fetchTransactions': true,
-                'fetchOpenOrders': true,
-                'createOrder': true,
                 'cancelOrder': true,
+                'CORS': true,
+                'createOrder': true,
+                'fetchBalance': true,
+                'fetchMarkets': true,
+                'fetchMyTrades': true,
+                'fetchOpenOrders': true,
+                'fetchOrder': true,
+                'fetchOrderBook': true,
+                'fetchOrders': true,
+                'fetchTicker': true,
+                'fetchTrades': true,
+                'fetchTransactions': true,
             },
             'urls': {
-                'logo': 'https://user-images.githubusercontent.com/1294454/27811229-c1efb510-606c-11e7-9a36-84ba2ce412d8.jpg',
+                'logo': 'https://user-images.githubusercontent.com/51840849/87460806-1c9f3f00-c616-11ea-8c46-a77018a8f3f4.jpg',
                 'api': 'https://coinmate.io/api',
                 'www': 'https://coinmate.io',
                 'fees': 'https://coinmate.io/fees',
@@ -561,6 +565,7 @@ module.exports = class coinmate extends Exchange {
         const statuses = {
             'FILLED': 'closed',
             'CANCELLED': 'canceled',
+            'PARTIALLY_FILLED': 'open',
             'OPEN': 'open',
         };
         return this.safeString (statuses, status, status);
@@ -623,12 +628,15 @@ module.exports = class coinmate extends Exchange {
         const price = this.safeFloat (order, 'price');
         const amount = this.safeFloat2 (order, 'originalAmount', 'amount');
         const remaining = this.safeFloat (order, 'remainingAmount', amount);
-        const status = this.parseOrderStatus (this.safeString (order, 'status'));
+        let status = this.parseOrderStatus (this.safeString (order, 'status'));
         const type = this.parseOrderType (this.safeString (order, 'orderTradeType'));
         let filled = undefined;
         let cost = undefined;
         if ((amount !== undefined) && (remaining !== undefined)) {
-            filled = amount - remaining;
+            filled = Math.max (amount - remaining, 0);
+            if (remaining === 0) {
+                status = 'closed';
+            }
             if (price !== undefined) {
                 cost = filled * price;
             }
