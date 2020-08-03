@@ -3,7 +3,7 @@
 //  ---------------------------------------------------------------------------
 
 const Exchange = require ('./base/Exchange');
-const { ExchangeError, AuthenticationError } = require ('./base/errors');
+const { ExchangeError, AuthenticationError, ArgumentsRequired } = require ('./base/errors');
 
 //  ---------------------------------------------------------------------------
 
@@ -16,9 +16,20 @@ module.exports = class itbit extends Exchange {
             'rateLimit': 2000,
             'version': 'v1',
             'has': {
+                'cancelOrder': true,
                 'CORS': true,
                 'createMarketOrder': false,
+                'createOrder': true,
+                'fetchBalance': true,
+                'fetchClosedOrders': true,
                 'fetchMyTrades': true,
+                'fetchOpenOrders': true,
+                'fetchOrder': true,
+                'fetchOrderBook': true,
+                'fetchOrders': true,
+                'fetchTicker': true,
+                'fetchTrades': true,
+                'fetchTransactions': true,
             },
             'urls': {
                 'logo': 'https://user-images.githubusercontent.com/1294454/27822159-66153620-60ad-11e7-89e7-005f6d7f3de0.jpg',
@@ -254,7 +265,7 @@ module.exports = class itbit extends Exchange {
         await this.loadMarkets ();
         const walletId = this.safeString (params, 'walletId');
         if (walletId === undefined) {
-            throw new ExchangeError (this.id + ' fetchMyTrades requires a walletId parameter');
+            throw new ArgumentsRequired (this.id + ' fetchMyTrades requires a walletId parameter');
         }
         const request = {
             'walletId': walletId,
